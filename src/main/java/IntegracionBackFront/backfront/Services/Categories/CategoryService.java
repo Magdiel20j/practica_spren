@@ -11,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -82,5 +83,12 @@ public class CategoryService {
         objEntity.setNombreCategoria(json.getNombreCategoria());
         objEntity.setFechaCreacion(json.getFechaCreacion());
         return objEntity;
+    }
+
+    public Page<CategoryDTO> getAllCategories(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+       Page<CategoryEntity> pageEntity = repo.findAll(pageable);
+       return pageEntity.map(this::convertirADTO);
+
     }
 }
