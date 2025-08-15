@@ -1,6 +1,7 @@
 package IntegracionBackFront.backfront.Services.Categories;
 
 import IntegracionBackFront.backfront.Entities.Categories.CategoryEntity;
+import IntegracionBackFront.backfront.Entities.Products.ProductEntity;
 import IntegracionBackFront.backfront.Exceptions.Category.ExceptionCategoryNotFound;
 import IntegracionBackFront.backfront.Models.DTO.Categories.CategoryDTO;
 import IntegracionBackFront.backfront.Repositories.Categories.CategoryRepository;
@@ -11,10 +12,10 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -23,6 +24,13 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository repo;
+
+    public List<CategoryDTO> getAllCategories(){
+        List<CategoryEntity> pageEntity = repo.findAll();
+        return pageEntity.stream()
+                .map(this::convertirADTO)
+                .collect(Collectors.toList());
+    }
 
     public CategoryDTO insert(@Valid CategoryDTO jsonData) {
         if (jsonData == null){
@@ -86,9 +94,8 @@ public class CategoryService {
     }
 
     public Page<CategoryDTO> getAllCategories(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-       Page<CategoryEntity> pageEntity = repo.findAll(pageable);
-       return pageEntity.map(this::convertirADTO);
-
+        Pageable pageable = PageRequest.of(page, size); //linea 1
+        Page<CategoryEntity> pageEntity = repo.findAll(pageable); // linea 2
+        return pageEntity.map(this::convertirADTO);
     }
 }
