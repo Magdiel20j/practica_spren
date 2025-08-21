@@ -81,6 +81,7 @@ public class ProductService {
         dto.setFechaIngreso(objEntity.getFechaIngreso());
         dto.setCategoriaId(objEntity.getCategoriaId());
         dto.setUsuarioId(objEntity.getUsuarioId());
+        dto.setImagen_url(objEntity.getImage_url());
         return dto;
     }
 
@@ -93,6 +94,7 @@ public class ProductService {
         entity.setFechaIngreso(json.getFechaIngreso());
         entity.setCategoriaId(json.getCategoriaId());
         entity.setUsuarioId(json.getUsuarioId());
+        entity.setImage_url(json.getImagen_url());
         return entity;
     }
 }
