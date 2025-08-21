@@ -42,6 +42,18 @@ public class CloudinaryService {
           String originalFilename = file.getOriginalFilename();
           String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
           String uniqueFilename = "img_" + UUID.randomUUID() + fileExtension;
+
+          Map<String, Object> options = ObjectUtils.asMap(
+                  "folder", folder, //carpeta de destino
+                  "public_id", uniqueFilename,
+                  "use_filname", false,
+                  "unique_filename", false,
+                  "overwrite", false,
+                  "resource_type", "auto",
+                  "quality", "auto:good"
+          );
+          Map<?,?> uploaderResult = cloudinary.uploader().upload(file.getBytes(),options);
+          return (String)  uploaderResult.get("secure_url");
     }
 
     private void validateImage(MultipartFile file) {
